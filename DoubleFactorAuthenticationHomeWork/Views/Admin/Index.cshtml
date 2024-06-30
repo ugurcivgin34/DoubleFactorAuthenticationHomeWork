@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ApplicationUser>
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h1>Admin Dashboard</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Son Giriş Zamanı</th>
+            <th>Son Çıkış Zamanı</th>
+            <th>Doğrulama Durumu</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.LastLoginTime</td>
+                <td>@user.LastLogoutTime</td>
+                <td>
+                    @if (user.LastLogoutWithoutVerification)
+                    {
+                        <span style="color: red;">&#x26A0;</span> <!-- Kırmızı ünlem işareti -->
+                    }
+                    else
+                    {
+                        <span>&#x2714;</span> <!-- Yeşil onay işareti -->
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Welcome</h1>
+
+@if (TempData["VerificationSent"] != null)
+{
+    <div class="alert alert-info">@TempData["VerificationSent"]</div>
+}
+@if (TempData["VerificationSuccess"] != null)
+{
+    <div class="alert alert-success">@TempData["VerificationSuccess"]</div>
+}
+@if (TempData["VerificationFailed"] != null)
+{
+    <div class="alert alert-danger">@TempData["VerificationFailed"]</div>
+}
+
+<form asp-action="SendVerificationCodeForLogout" asp-controller="Account" method="post">
+    <button type="submit" class="btn btn-primary">Çıkış İçin Doğrulama Kodu Gönder</button>
+</form>
+
+<form asp-action="Logout" asp-controller="Account" method="post" class="mt-2">
+    <button type="submit" class="btn btn-danger">Çıkış Yap</button>
+</form>

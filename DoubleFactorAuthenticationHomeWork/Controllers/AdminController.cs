@@ -1,8 +1,8 @@
 ﻿using DoubleFactorAuthenticationHomeWork.Models;
+using DoubleFactorAuthenticationHomeWork.ViemModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DoubleFactorAuthenticationHomeWork.Controllers
 {
@@ -18,9 +18,19 @@ namespace DoubleFactorAuthenticationHomeWork.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = _userManager.Users.Select(u => new UserViewModel
+            {
+                Email = u.Email,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                LastLoginTime = u.LastLoginTime,
+                LastLogoutTime = u.LastLogoutTime,
+                LastLogoutWithoutVerification = u.LastLogoutWithoutVerification
+            }).ToList();
+
             return View(users);
         }
     }
+
 
 }

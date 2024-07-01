@@ -41,17 +41,25 @@ namespace DoubleFactorAuthenticationHomeWork.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsTwoFactorAuthenticated")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastLoginTime")
+                    b.Property<DateTime?>("LastLoginTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("LastLogoutTime")
+                    b.Property<DateTime?>("LastLogoutTime")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("LastLogoutWithoutVerification")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");

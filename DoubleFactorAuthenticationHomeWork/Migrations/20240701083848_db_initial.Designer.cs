@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoubleFactorAuthenticationHomeWork.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240630214620_db_initial")]
+    [Migration("20240701083848_db_initial")]
     partial class db_initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,14 +43,25 @@ namespace DoubleFactorAuthenticationHomeWork.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsTwoFactorAuthenticated")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastLoginTime")
+                    b.Property<DateTime?>("LastLoginTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("LastLogoutTime")
+                    b.Property<DateTime?>("LastLogoutTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("LastLogoutWithoutVerification")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");

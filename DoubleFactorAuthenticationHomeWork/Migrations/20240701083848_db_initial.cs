@@ -28,9 +28,12 @@ namespace DoubleFactorAuthenticationHomeWork.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LastLoginTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastLogoutTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastLoginTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastLogoutTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsTwoFactorAuthenticated = table.Column<bool>(type: "bit", nullable: false),
+                    LastLogoutWithoutVerification = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

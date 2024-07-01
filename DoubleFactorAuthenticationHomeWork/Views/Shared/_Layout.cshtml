@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,40 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DoubleFactorAuthenticationHomeWork.styles.css" asp-append-version="true" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+            .login-container .form-control {
+                border-radius: 0;
+            }
+
+            .login-container .btn-primary, .login-container .btn-secondary {
+                border-radius: 0;
+                min-width: 100px;
+            }
+
+            .login-container .btn-secondary {
+                background-color: #6c757d;
+                color: white;
+                text-decoration: none;
+            }
+
+                .login-container .btn-secondary:hover {
+                    background-color: #5a6268;
+                    color: white;
+                }
+    </style>
 </head>
 <body>
     <header>
@@ -20,11 +54,14 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                      
                     </ul>
                 </div>
             </div>
@@ -38,7 +75,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - DoubleFactorAuthenticationHomeWork - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - DoubleFactorAuthenticationHomeWork - <a asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

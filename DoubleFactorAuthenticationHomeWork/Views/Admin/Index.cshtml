@@ -1,15 +1,18 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@using DoubleFactorAuthenticationHomeWork.ViemModels
+@model IEnumerable<UserViewModel>
 
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<h1>Admin Dashboard</h1>
+<h1>Admin Arayüzü</h1>
 
 <table class="table">
     <thead>
         <tr>
             <th>Email</th>
+            <th>Ad</th>
+            <th>Soyad</th>
             <th>Son Giriş Zamanı</th>
             <th>Son Çıkış Zamanı</th>
             <th>Doğrulama Durumu</th>
@@ -20,19 +23,25 @@
         {
             <tr>
                 <td>@user.Email</td>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
                 <td>@user.LastLoginTime</td>
                 <td>@user.LastLogoutTime</td>
                 <td>
                     @if (user.LastLogoutWithoutVerification)
                     {
-                        <span style="color: red;">&#x26A0;</span> <!-- Kırmızı ünlem işareti -->
+                        <span class="text-danger">Doğrulama yapılmadan çıkış</span>
                     }
                     else
                     {
-                        <span>&#x2714;</span> <!-- Yeşil onay işareti -->
+                        <span class="text-success">Doğrulama yapıldı</span>
                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<form asp-action="AdminLogout" asp-controller="Account" method="post">
+    <button type="submit" class="btn btn-danger">Çıkış Yap</button>
+</form>

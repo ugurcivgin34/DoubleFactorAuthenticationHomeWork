@@ -32,6 +32,8 @@ namespace DoubleFactorAuthenticationHomeWork.Utility
                 var adminUser = new ApplicationUser
                 {
                     UserName = "admin",
+                    FirstName="admin",
+                    LastName="admin",
                     Email = "u.civgin@gmail.com",
                     EmailConfirmed = true
                 };
@@ -44,5 +46,4 @@ namespace DoubleFactorAuthenticationHomeWork.Utility
             }
         }
     }
-
 }

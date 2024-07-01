@@ -1,5 +1,4 @@
-﻿using DoubleFactorAuthenticationHomeWork.Controllers;
-using DoubleFactorAuthenticationHomeWork.Models;
+﻿using DoubleFactorAuthenticationHomeWork.Models;
 using DoubleFactorAuthenticationHomeWork.ViemModels;
 using FluentEmail.Core;
 using Microsoft.AspNetCore.Identity;
@@ -36,7 +35,13 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName
+            };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
@@ -52,6 +57,7 @@ public class AccountController : Controller
 
         return View(model);
     }
+
 
     [HttpGet]
     public IActionResult Login(string returnUrl = null)
@@ -257,5 +263,19 @@ public class AccountController : Controller
         return View(model);
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AdminLogout()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user != null)
+        {
+            user.LastLogoutTime = DateTime.Now;
+            user.LastLogoutWithoutVerification = false;
+            await _userManager.UpdateAsync(user);
+            await _signInManager.SignOutAsync();
+        }
+        return RedirectToAction(nameof(AccountController.Login), "Account");
+    }
 }
 

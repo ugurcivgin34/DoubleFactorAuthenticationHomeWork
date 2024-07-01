@@ -10,6 +10,7 @@ namespace DoubleFactorAuthenticationHomeWork.Models
         public DateTime? LastLogoutTime { get; set; }
         public bool IsTwoFactorAuthenticated { get; set; }
         public bool LastLogoutWithoutVerification { get; set; }
+        public int TwoFactorCode { get; set; } 
     }
 
 }

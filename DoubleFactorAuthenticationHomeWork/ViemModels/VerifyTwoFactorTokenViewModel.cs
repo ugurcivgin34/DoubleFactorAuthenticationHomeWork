@@ -8,7 +8,7 @@ namespace DoubleFactorAuthenticationHomeWork.ViemModels
         public string Email { get; set; }
 
         [Required]
-        public string Token { get; set; }
+        public int Token { get; set; }
     }
 
 

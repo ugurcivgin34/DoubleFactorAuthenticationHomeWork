@@ -22,6 +22,12 @@ public class AccountController : Controller
         _logger = logger;
         _emailSender = emailSender;
     }
+    private static Random random = new Random();
+
+    private int GenerateRandomCode()
+    {
+        return random.Next(100000, 999999);
+    }
 
     [HttpGet]
     public IActionResult Register()
@@ -81,21 +87,25 @@ public class AccountController : Controller
             if (result.Succeeded)
             {
                 _logger.LogInformation($"User signed in: {model.Email}");
-                user.LastLoginTime = DateTime.Now;
-                await _userManager.UpdateAsync(user);
 
 
                 // Kullanıcı admin mi kontrol et
                 if (await _userManager.IsInRoleAsync(user, "Admin"))
                 {
+                    user.LastLoginTime = DateTime.Now;
+                    await _userManager.UpdateAsync(user);
                     return RedirectToAction("Index", "Admin");
                 }
 
-                var token = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
+                int code = GenerateRandomCode();
+                user.TwoFactorCode = code;
+                user.LastLoginTime = DateTime.Now;
+                await _userManager.UpdateAsync(user);
+
                 await _emailSender
                     .To(model.Email)
                     .Subject("Giriş Doğrulama Kodu")
-                    .Body($"Doğrulama kodunuz: {token}")
+                    .Body($"Doğrulama kodunuz: {code}")
                     .SendAsync();
 
                 return RedirectToAction(nameof(VerifyTwoFactorToken), new { email = model.Email });
@@ -129,8 +139,7 @@ public class AccountController : Controller
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
-                var result = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider, model.Token);
-                if (result)
+                if (user.TwoFactorCode == model.Token)
                 {
                     user.IsTwoFactorAuthenticated = true;
                     await _userManager.UpdateAsync(user);
@@ -151,17 +160,17 @@ public class AccountController : Controller
         var user = await _userManager.GetUserAsync(User);
         if (user != null)
         {
-                user.LastLogoutWithoutVerification = true; // Doğrulama yapmadan çıkış
-                var admin = await _userManager.GetUsersInRoleAsync("Admin");
-                if (admin.Any())
-                {
-                    var adminUser = admin.First();
-                    await _emailSender
-                        .To(adminUser.Email)
-                        .Subject("Doğrulama Yapılmadan Çıkış")
-                        .Body($"Kullanıcı {user.Email} doğrulama yapmadan çıkış yaptı.")
-                        .SendAsync();
-                }
+            user.LastLogoutWithoutVerification = true; // Doğrulama yapmadan çıkış
+            var admin = await _userManager.GetUsersInRoleAsync("Admin");
+            if (admin.Any())
+            {
+                var adminUser = admin.First();
+                await _emailSender
+                    .To(adminUser.Email)
+                    .Subject("Doğrulama Yapılmadan Çıkış")
+                    .Body($"Kullanıcı {user.Email} doğrulama yapmadan çıkış yaptı.")
+                    .SendAsync();
+            }
 
             user.LastLogoutTime = DateTime.Now;
             await _userManager.UpdateAsync(user);
@@ -169,7 +178,6 @@ public class AccountController : Controller
 
             await _signInManager.SignOutAsync();
 
-            // Session'dan kullanıcı bilgilerini sil
         }
         return RedirectToAction(nameof(AccountController.Login), "Account");
     }
@@ -181,11 +189,13 @@ public class AccountController : Controller
         var user = await _userManager.GetUserAsync(User);
         if (user != null)
         {
-            var token = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
+            int code = GenerateRandomCode();
+            user.TwoFactorCode = code;
+            await _userManager.UpdateAsync(user);
             await _emailSender
                 .To(user.Email)
                 .Subject("Çıkış Doğrulama Kodu")
-                .Body($"Doğrulama kodunuz: {token}")
+                .Body($"Doğrulama kodunuz: {code}")
                 .SendAsync();
 
             TempData["VerificationSent"] = "Doğrulama kodu e-posta adresinize gönderildi.";
@@ -221,13 +231,14 @@ public class AccountController : Controller
         var user = await _userManager.GetUserAsync(User);
         if (user != null)
         {
-            var token = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
+            int code = GenerateRandomCode();
+            user.TwoFactorCode = code;
             user.LastLogoutWithoutVerification = false;
             await _userManager.UpdateAsync(user);
             await _emailSender
                 .To(user.Email)
                 .Subject("Çıkış Doğrulama Kodu")
-                .Body($"Doğrulama kodunuz: {token}")
+                .Body($"Doğrulama kodunuz: {code}")
                 .SendAsync();
 
         }
@@ -250,12 +261,11 @@ public class AccountController : Controller
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
-                var result = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider, model.Token);
-                if (result)
+                if (user.TwoFactorCode == model.Token)
                 {
                     user.IsTwoFactorAuthenticated = true;
                     await _userManager.UpdateAsync(user);
-                    return RedirectToAction("Login","Account");
+                    return RedirectToAction("Login", "Account");
                 }
             }
             ModelState.AddModelError(string.Empty, "Invalid token.");

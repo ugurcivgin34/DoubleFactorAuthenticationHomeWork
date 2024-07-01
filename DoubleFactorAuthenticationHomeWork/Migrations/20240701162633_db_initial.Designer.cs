@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoubleFactorAuthenticationHomeWork.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240701083848_db_initial")]
+    [Migration("20240701162633_db_initial")]
     partial class db_initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,6 +88,9 @@ namespace DoubleFactorAuthenticationHomeWork.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TwoFactorCode")
+                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
